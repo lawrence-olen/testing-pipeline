@@ -20,8 +20,8 @@ pipeline {
           // Mengambil commit sebelumnya
           def previousCommit = sh(script: 'git rev-parse HEAD^', returnStdout: true).trim()
           // Periksa perubahan di setiap service
-          uiChanged = sh(script: "git diff --name-only ${previousCommit} HEAD grep '^src/ui/' || true", returnStdout: true).trim()
-          cartChanged = sh(script: "git diff --name-only ${previousCommit} HEAD grep '^src/cart/' || true", returnStdout: true).trim()
+          uiChanged = sh(script: "git diff --name-only ${previousCommit} HEAD | grep '^src/ui/' || true", returnStdout: true).trim()
+          cartChanged = sh(script: "git diff --name-only ${previousCommit} HEAD | grep '^src/cart/' || true", returnStdout: true).trim()
 
           // Flag untuk menentukan apakah ada perubahan di setiap service
           hasUiChanges = uiChanged ? true : false
