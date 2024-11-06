@@ -1,7 +1,7 @@
 pipeline {
   agent any
 
-  environtment {
+  environment {
     REPO_URL = 'https://github.com/lawrence-olen/testing-pipeline.git'
     GIT_CREDENTIALS = 'master-testing'
     GIT_BRANCH = 'production'
