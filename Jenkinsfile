@@ -25,10 +25,18 @@ pipeline {
           // Periksa perubahan di setiap service
           uiChanged = sh(script: "git diff --name-only ${previousCommit} HEAD | grep '^src/ui/' || true", returnStdout: true).trim()
           cartChanged = sh(script: "git diff --name-only ${previousCommit} HEAD | grep '^src/cart/' || true", returnStdout: true).trim()
+          catalogChanged = sh(script: "git diff --name-only ${previousCommit} HEAD | grep '^src/catalog/' || true", returnStdout: true).trim()
+          ordersChanged = sh(script: "git diff --name-only ${previousCommit} HEAD | grep '^src/orders/' || true", returnStdout: true).trim()
+          checkoutChanged = sh(script: "git diff --name-only ${previousCommit} HEAD | grep '^src/checkout/' || true", returnStdout: true).trim()
+          assetsChanged = sh(script: "git diff --name-only ${previousCommit} HEAD | grep '^src/assets/' || true", returnStdout: true).trim()
 
           // Flag untuk menentukan apakah ada perubahan di setiap service
           hasUiChanges = uiChanged ? true : false
           hasCartChanges = cartChanged ? true : false
+          hasCatalogChanges = catalogChanged ? true : false
+          hasOrdersChanges = ordersChanged ? true : false
+          hasCheckoutChanges = checkoutChanged ? true : false
+          hasAssetsChanges = assetsChanged ? true : false
 
           if (hasUiChanges) {
             echo "Changes detected in src/ui: ${hasUiChanges}"
@@ -40,6 +48,30 @@ pipeline {
             echo "Changes detected in src/cart: ${hasCartChanges}"
           } else {
             echo "No Changes detected in src/cart"
+          }
+
+          if (hasCatalogChanges) {
+            echo "Changes detected in src/catalog: ${hasCatalogChanges}"
+          } else {
+            echo "No Changes detected in src/catalog"
+          }
+
+          if (hasOrdersChanges) {
+            echo "Changes detected in src/orders: ${hasOrdersChanges}"
+          } else {
+            echo "No Changes detected in src/orders"
+          }
+
+          if (hasCheckoutChanges) {
+            echo "Changes detected in src/checkout: ${hasCheckoutChanges}"
+          } else {
+            echo "No Changes detected in src/checkout"
+          }
+
+          if (hasAssetsChanges) {
+            echo "Changes detected in src/assets: ${hasAssetsChanges}"
+          } else {
+            echo "No Changes detected in src/assets"
           }
         }
       }
