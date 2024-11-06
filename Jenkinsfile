@@ -100,6 +100,7 @@ pipeline {
                 sh """
                 ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
                   docker push ${IMAGE_TAG_UI}
+                  docker system prune -a -f
                 '
                 """
               } 
@@ -118,6 +119,7 @@ pipeline {
                 sh """
                 ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
                   docker push ${IMAGE_TAG_CART}
+                  docker system prune -a -f
                 '
                 """
               }
