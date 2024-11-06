@@ -86,5 +86,45 @@ pipeline {
         }
       }
     }
+
+    stage ("Push Docker Image") {
+      parallel {
+        stage ("UI Service") {
+          when {
+            expression { return hasUiChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  docker push ${IMAGE_TAG_UI}
+                '
+                """
+              } 
+            }
+          }
+        }
+
+        stage ("Cart Service") {
+          when {
+            expression { return hasCartChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  docker push ${IMAGE_TAG_CART}
+                '
+                """
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
