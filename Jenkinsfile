@@ -29,10 +29,14 @@ pipeline {
 
           if (hasUiChanges) {
             echo "Changes detected in src/ui: ${hasUiChanges}"
+          } else {
+            echo "No Changes detected in src/ui"
           }
 
           if (hasCartChanges) {
             echo "Changes detected in src/cart: ${hasCartChanges}"
+          } else {
+            echo "No Changes detected in src/cart"
           }
         }
       }
