@@ -5,6 +5,8 @@ pipeline {
     REPO_URL = 'https://github.com/lawrence-olen/testing-pipeline.git'
     GIT_CREDENTIALS = 'master-testing'
     GIT_BRANCH = 'production'
+    DIR_BUILD = '/home/crocox/retail-store'
+    IMAGE_TAG = 'crocoxolen/retail-store-sample-ui:production'
   }
 
   stages {
