@@ -6,7 +6,8 @@ pipeline {
     GIT_CREDENTIALS = 'master-testing'
     GIT_BRANCH = 'production'
     DIR_BUILD = '/home/crocox/retail-store'
-    IMAGE_TAG = 'crocoxolen/retail-store-sample-ui:production'
+    IMAGE_TAG_UI = 'crocoxolen/retail-store-sample-ui:production'
+    IMAGE_TAG_CART = 'crocoxolen/retail-store-sample-cart:production'
   }
 
   stages {
@@ -58,6 +59,25 @@ pipeline {
                 ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
                   cd ${DIR_BUILD} &&
                   docker buildx build --no-cache -t ${IMAGE_TAG} src/ui
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Cart Service") {
+          when {
+            expression { return hasCartChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_BUILD} &&
+                  docker buildx build --no-cache -t ${IMAGE_TAG_CART} src/cart
                 '
                 """
               }
