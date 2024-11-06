@@ -8,6 +8,10 @@ pipeline {
     DIR_BUILD = '/home/crocox/retail-store'
     IMAGE_TAG_UI = 'crocoxolen/retail-store-sample-ui:production'
     IMAGE_TAG_CART = 'crocoxolen/retail-store-sample-cart:production'
+    IMAGE_TAG_CATALOG = 'crocoxolen/retail-store-sample-catalog:production'
+    IMAGE_TAG_ORDERS = 'crocoxolen/retail-store-sample-orders:production'
+    IMAGE_TAG_CHECKOUT = 'crocoxolen/retail-store-sample-checkout:production'
+    IMAGE_TAG_ASSETS = 'crocoxolen/retail-store-sample-assets:production'
   }
 
   stages {
@@ -116,6 +120,82 @@ pipeline {
             }
           }
         }
+
+        stage ("Catalog Service") {
+          when {
+            expression { return hasCatalogChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_BUILD} &&
+                  docker buildx build --no-cache -t ${IMAGE_TAG_CATALOG} src/catalog
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Orders Service") {
+          when {
+            expression { return hasOrdersChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_BUILD} &&
+                  docker buildx build --no-cache -t ${IMAGE_TAG_ORDERS} src/orders
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Checkout Service") {
+          when {
+            expression { return hasCheckoutChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_BUILD} &&
+                  docker buildx build --no-cache -t ${IMAGE_TAG_CHECKOUT} src/checkout
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Assets Service") {
+          when {
+            expression { return hasAssetsChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_BUILD} &&
+                  docker buildx build --no-cache -t ${IMAGE_TAG_ASSETS} src/assets
+                '
+                """
+              }
+            }
+          }
+        }
       }
     }
 
@@ -151,6 +231,82 @@ pipeline {
                 sh """
                 ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
                   docker push ${IMAGE_TAG_CART}
+                  docker system prune -a -f
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Catalog Service") {
+          when {
+            expression { return hasCatalogChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  docker push ${IMAGE_TAG_CATALOG}
+                  docker system prune -a -f
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Orders Service") {
+          when {
+            expression { return hasOrdersChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  docker push ${IMAGE_TAG_ORDERS}
+                  docker system prune -a -f
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Checkout Service") {
+          when {
+            expression { return hasCheckoutChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  docker push ${IMAGE_TAG_CHECKOUT}
+                  docker system prune -a -f
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Assets Service") {
+          when {
+            expression { return hasAssetsChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  docker push ${IMAGE_TAG_ASSETS}
                   docker system prune -a -f
                 '
                 """
