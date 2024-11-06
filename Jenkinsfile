@@ -9,7 +9,7 @@ pipeline {
 
   stages {
     stage ("Checkout and Pull Repository") {
-      script {
+      steps {
         git url: "${REPO_URL}", credentialsId: "${GIT_CREDENTIALS}", branch: "${GIT_BRANCH}"
       }
     }
