@@ -58,7 +58,7 @@ pipeline {
                 sh """
                 ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
                   cd ${DIR_BUILD} &&
-                  docker buildx build --no-cache -t ${IMAGE_TAG} src/ui
+                  docker buildx build --no-cache -t ${IMAGE_TAG_UI} src/ui
                 '
                 """
               }
