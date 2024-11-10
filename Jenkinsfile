@@ -309,7 +309,7 @@ pipeline {
                   docker push ${IMAGE_TAG_ASSETS}
                   docker system prune -a -f
                 '
-                """
+                """ 
               }
             }
           }
