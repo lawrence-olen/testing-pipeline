@@ -346,8 +346,12 @@ pipeline {
           steps {
             script {
               sshagent(credentials: [env.GIT_CREDENTIALS]) {
-                cd ${DIR_DEPLOY}/carts &&
-                helm upgrade -f values.yaml -n default carts .
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_DEPLOY}/carts &&
+                  helm upgrade -f values.yaml -n default carts .
+                '
+                """
               }
             }
           }
@@ -361,8 +365,12 @@ pipeline {
           steps {
             script {
               sshagent(credentials: [env.GIT_CREDENTIALS]) {
-                cd ${DIR_DEPLOY}/catalog &&
-                helm upgrade -f values.yaml -n default catalog .
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_DEPLOY}/catalog &&
+                  helm upgrade -f values.yaml -n default catalog .
+                '
+                """
               }
             }
           }
@@ -376,8 +384,12 @@ pipeline {
           steps {
             script {
               sshagent(credentials: [env.GIT_CREDENTIALS]) {
-                cd ${DIR_DEPLOY}/orders &&
-                helm upgrade -f values.yaml -n default orders .
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_DEPLOY}/orders &&
+                  helm upgrade -f values.yaml -n default orders .
+                '
+                """
               }
             }
           }
@@ -391,8 +403,12 @@ pipeline {
           steps {
             script {
               sshagent(credentials: [env.GIT_CREDENTIALS]) {
-                cd ${DIR_DEPLOY}/checkout &&
-                helm upgrade -f values.yaml -n default checkout .
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_DEPLOY}/checkout &&
+                  helm upgrade -f values.yaml -n default checkout .
+                '
+                """
               }
             }
           }
@@ -406,8 +422,12 @@ pipeline {
           steps {
             script {
               sshagent(credentials: [env.GIT_CREDENTIALS]) {
-                cd ${DIR_DEPLOY}/assets &&
-                helm upgrade -f values.yaml -n default assets .
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_DEPLOY}/assets &&
+                  helm upgrade -f values.yaml -n default assets .
+                '
+                """
               }
             }
           }
