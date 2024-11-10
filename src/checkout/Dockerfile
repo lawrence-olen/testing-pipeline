@@ -5,7 +5,7 @@ COPY --chown=node:node . .
 RUN npm ci -f
 RUN npm run build
 USER node
-
+  
 
 FROM public.ecr.aws/amazonlinux/amazonlinux:2023
 
