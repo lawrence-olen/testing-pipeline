@@ -6,6 +6,7 @@ pipeline {
     GIT_CREDENTIALS = 'master-testing'
     GIT_BRANCH = 'production'
     DIR_BUILD = '/home/crocox/retail-store'
+    DIR_DEPLOY = '/home/crocox/retail-store/deploy/kubernetes/charts'
     IMAGE_TAG_UI = 'crocoxolen/retail-store-sample-ui:production'
     IMAGE_TAG_CART = 'crocoxolen/retail-store-sample-cart:production'
     IMAGE_TAG_CATALOG = 'crocoxolen/retail-store-sample-catalog:production'
