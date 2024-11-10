@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: public.ecr.aws/aws-containers/retail-store-sample-assets
+  repository: crocoxolen/retail-store-sample-assets
   pullPolicy: IfNotPresent
-  tag: 0.8.2
+  tag: production
 
 imagePullSecrets: []
 nameOverride: ""
