@@ -316,5 +316,103 @@ pipeline {
         }
       }
     }
+
+    stage ("Deployment Service on Retail Store") {
+      parallel {
+        stage ("Deploy UI Service") {
+          when {
+            expression { return hasUiChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                sh """
+                ssh -o StrictHostKeyChecking=no ${MASTER_TESTING_SERVER} '
+                  cd ${DIR_DEPLOY}/ui &&
+                  helm upgrade -f values.yaml -n default ui .
+                '
+                """
+              }
+            }
+          }
+        }
+
+        stage ("Deploy Cart Service") {
+          when {
+            expression { return hasCartChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                cd ${DIR_DEPLOY}/carts &&
+                helm upgrade -f values.yaml -n default carts .
+              }
+            }
+          }
+        }
+
+        stage ("Deploy Catalog Service") {
+          when {
+            expression { return hasCatalogChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                cd ${DIR_DEPLOY}/catalog &&
+                helm upgrade -f values.yaml -n default catalog .
+              }
+            }
+          }
+        }
+
+        stage ("Deploy Orders Service") {
+          when {
+            expression { return hasOrdersChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                cd ${DIR_DEPLOY}/orders &&
+                helm upgrade -f values.yaml -n default orders .
+              }
+            }
+          }
+        }
+
+        stage ("Deploy Checkout Service") {
+          when {
+            expression { return hasCheckoutChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                cd ${DIR_DEPLOY}/checkout &&
+                helm upgrade -f values.yaml -n default checkout .
+              }
+            }
+          }
+        }
+
+        stage ("Deploy Assets Service") {
+          when {
+            expression { return hasAssetsChanges }
+          }
+
+          steps {
+            script {
+              sshagent(credentials: [env.GIT_CREDENTIALS]) {
+                cd ${DIR_DEPLOY}/assets &&
+                helm upgrade -f values.yaml -n default assets .
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
